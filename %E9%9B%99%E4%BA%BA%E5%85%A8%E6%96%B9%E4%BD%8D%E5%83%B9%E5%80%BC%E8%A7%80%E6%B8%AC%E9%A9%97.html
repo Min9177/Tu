@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f7f5f0">
+<title>雙人全方位價值觀測驗</title>
+<style>
+:root{--bg:#f7f5f0;--paper:#fffefa;--ink:#252a2b;--muted:#697173;--line:#e4e1d9;--accent:#426b63;--accent2:#e8f0ec;--warn:#a64d3d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC",sans-serif;line-height:1.6}
+header{padding:34px 18px 22px;background:linear-gradient(145deg,#e9efea,#f7f5f0 72%);border-bottom:1px solid var(--line)}
+.hero,.wrap{max-width:850px;margin:0 auto}
+.eyebrow{font-size:.78rem;letter-spacing:.13em;color:var(--accent);font-weight:750}
+h1{font-size:clamp(1.65rem,5vw,2.35rem);line-height:1.25;margin:.45rem 0 .65rem}
+.lead{color:#4d5756;max-width:660px;margin:0}
+.wrap{padding:20px 14px 56px}
+.panel,.domain{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:18px;margin:0 0 16px;box-shadow:0 3px 12px #252a2b06}
+label.name-label{display:block;font-weight:700;margin-bottom:7px}
+input[type=text]{width:100%;font:inherit;padding:12px 13px;border:1px solid #c9cec9;border-radius:10px;background:white;color:var(--ink)}
+.instructions{font-size:.94rem;color:var(--muted);margin:10px 0 0}
+.scale-key{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.pill{font-size:.82rem;background:#f0f1ec;border-radius:999px;padding:5px 10px}
+.sticky-progress{position:sticky;top:0;z-index:5;background:#f7f5f0f2;backdrop-filter:blur(12px);padding:10px 0 12px;margin:0 0 16px}
+.progress-row{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:.9rem;font-weight:700;margin-bottom:7px}
+progress{width:100%;height:9px;border:0;border-radius:99px;overflow:hidden;appearance:none}
+progress::-webkit-progress-bar{background:#e4e5df;border-radius:99px}progress::-webkit-progress-value{background:var(--accent);border-radius:99px}progress::-moz-progress-bar{background:var(--accent)}
+.domain{padding:0;overflow:hidden}
+.domain-head{padding:15px 18px;background:#f0f3ee;border-bottom:1px solid var(--line)}
+.domain-head h2{font-size:1.08rem;margin:0}
+.domain-head p{font-size:.84rem;color:var(--muted);margin:3px 0 0}
+.question{padding:17px 18px 18px;border-bottom:1px solid var(--line)}
+.question:last-child{border-bottom:0}
+.qtext{font-weight:600;margin:0 0 12px}
+.qnum{color:var(--accent);font-size:.8rem;font-weight:800;margin-right:6px;white-space:nowrap}
+.choices{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px}
+.choice{position:relative}
+.choice input{position:absolute;opacity:0;width:1px;height:1px}
+.choice label{display:flex;align-items:center;justify-content:center;gap:5px;min-height:44px;border:1px solid #d6dad5;border-radius:10px;background:#fff;cursor:pointer;font-weight:750}
+.choice input:checked+label{background:var(--accent2);border:2px solid var(--accent);color:#234c43}
+.choice input:focus-visible+label{outline:3px solid #9ab8ae;outline-offset:2px}
+.choice label span{font-size:.72rem;font-weight:500;color:var(--muted)}
+.choice input:checked+label span{color:inherit}
+.missing{border-color:#d9a39a;background:#fff9f7}
+.error{display:none;color:var(--warn);font-size:.85rem;margin:8px 0 0}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin:20px 0}
+button{font:inherit;font-weight:750;border:0;border-radius:11px;padding:12px 17px;cursor:pointer}
+.primary{background:var(--accent);color:white;flex:1;min-width:190px}
+.secondary{background:#e9e9e2;color:var(--ink)}
+button:disabled{opacity:.45;cursor:not-allowed}
+.privacy{font-size:.83rem;color:var(--muted)}
+footer{color:var(--muted);font-size:.82rem;text-align:center;padding:10px 0 24px}
+#result{display:none}
+.notice{padding:12px 14px;border-radius:12px;background:#eef3ed;margin:12px 0}
+@media(max-width:520px){header{padding-top:27px}.panel{padding:15px}.question{padding:15px 13px}.domain-head{padding:13px}.choices{gap:5px}.choice label{flex-direction:column;gap:0;min-height:52px}.choice label span{font-size:.64rem}.wrap{padding-left:10px;padding-right:10px}}
+</style>
+</head>
+<body>
+<header><div class="hero">
+<div class="eyebrow">TWO-PERSON VALUES CHECK-IN</div>
+<h1>雙人全方位價值觀測驗</h1>
+<p class="lead">用 75 個生活情境與觀點，探索兩個人如何看待人生、金錢、社會、人際、自由與幸福。這不是人格診斷，也沒有標準答案；目的是讓差異變得可討論。</p>
+</div></header>
+<main class="wrap">
+<form id="quiz" novalidate>
+<section class="panel">
+<label class="name-label" for="respondent">填寫者名稱</label>
+<input id="respondent" name="respondent" type="text" maxlength="80" placeholder="例如：A／小林" required>
+<p class="instructions">請由兩人各自獨立填寫一份，完成後各自下載 JSON 檔，再把兩份檔案交給 ChatGPT 比較。請依照你「實際相信或通常會採取的立場」作答，而不是理想中的自己。</p>
+<div class="scale-key"><span class="pill">1 非常不同意</span><span class="pill">2 不同意</span><span class="pill">3 普通／視情況</span><span class="pill">4 同意</span><span class="pill">5 非常同意</span></div>
+</section>
+<div class="sticky-progress" aria-live="polite">
+<div class="progress-row"><span>作答進度</span><span id="progressText">0 / 75 題</span></div>
+<progress id="progress" value="0" max="75"></progress>
+</div>
+<div id="questions"></div>
+<div id="formError" class="error" role="alert">請填寫名稱，並完成所有 75 題。尚未作答的題目已標示。</div>
+<div class="actions">
+<button type="submit" class="primary">完成並下載我的答案 JSON</button>
+<button type="button" class="secondary" id="resetBtn">清除作答</button>
+</div>
+<p class="privacy">隱私提醒：這份網頁在你的瀏覽器本機運作，不會自動上傳答案。下載的 JSON 會包含名稱、作答時間、所有題目與答案，分享前請確認內容。</p>
+</form>
+<section id="result" class="panel" aria-live="polite">
+<h2>已完成這份測驗</h2>
+<div class="notice" id="resultText"></div>
+<p>請保留下載的 JSON 檔。另一位填寫者也完成後，把兩份 JSON 一起上傳到同一個 ChatGPT 對話，並請求分析 15 個面向的相似程度、主要共識、關鍵差異與適合進一步討論的問題。</p>
+<button type="button" class="secondary" id="backBtn">返回查看答案</button>
+</section>
+<footer>雙人全方位價值觀測驗 · 自我探索與溝通工具</footer>
+</main>
+<script>
+const sections = [
+["人生觀","你如何理解人生方向、選擇與成就。",[
+"人生應該有一個清楚且長期的方向，並持續朝它前進。",
+"比起符合他人的期待，活得符合自己的信念更重要。",
+"即使結果不如預期，只要是自己深思熟慮後的選擇，就值得承擔。",
+"人生不同階段可以有完全不同的目標，不必維持一貫的人生規劃。",
+"一個人的價值不應主要由成就、職稱或社會地位決定。"]],
+["金錢觀","金錢、消費、儲蓄與財務安全。",[
+"財務安全感是做出人生選擇時的重要基礎。",
+"只要不影響基本生活與未來責任，花錢買體驗通常值得。",
+"即使收入增加，也應維持固定的儲蓄或投資習慣。",
+"為了更高的收入或財務自由，我願意承擔一定程度的不確定性。",
+"親近的人之間談清楚金錢往來與分攤方式，是健康關係的一部分。"]],
+["道德與是非觀","原則、誠實、責任與灰色地帶。",[
+"即使說實話會讓自己吃虧，通常仍應避免刻意欺騙。",
+"判斷一件事對不對時，動機與造成的結果都應納入考量。",
+"在特殊情況下，違反規則可能比盲目遵守規則更合理。",
+"即使沒有人會發現，仍應為自己做過的事負責。",
+"對親近的人也應維持基本的是非標準，不應只因關係而偏袒。"]],
+["社會與公平觀","公平、制度、權利與公共責任。",[
+"社會應優先保障每個人獲得基本生活與教育資源的機會。",
+"只要規則事先清楚且一致，結果不同不一定代表不公平。",
+"制度設計應考慮人們起點不同，而不只是表面上一視同仁。",
+"當多數人的利益與少數人的基本權利衝突時，少數人的權利仍應受到保障。",
+"個人除了追求自己的生活，也有一定責任關心公共議題與社會影響。"]],
+["家庭觀","家庭責任、親密程度與個人選擇。",[
+"成年後仍應在能力範圍內承擔照顧或支持家人的責任。",
+"家人之間也需要清楚的界線，不應因為是家人就能無條件介入。",
+"重大人生決定應以自己的意願為主，即使家人不認同也一樣。",
+"家庭成員遇到困難時，彼此提供實際協助比只表達關心更重要。",
+"維持家庭和諧值得努力，但不應以長期壓抑自己的需求為代價。"]],
+["友情與人際觀","信任、互惠、社交與人際期待。",[
+"真正的友情即使很久沒有聯絡，也能在需要時重新連結。",
+"朋友之間應該能坦白指出彼此的問題，而不只是提供安慰。",
+"人際關係需要互相投入；若長期只有一方付出，就應重新評估。",
+"我更重視少數深度且可靠的關係，而不是擁有廣泛的社交圈。",
+"即使是好朋友，也不代表對方有義務隨時回訊息或提供情緒支持。"]],
+["工作與事業觀","工作意義、成就、穩定與自主。",[
+"工作應提供生活以外的意義或成長，而不只是換取薪水。",
+"如果收入足夠，我願意選擇自由度高但職涯路徑較不固定的工作。",
+"穩定、可預期的工作條件，比快速升遷或高成就更重要。",
+"為了有價值的職涯目標，我可以接受一段時間的高強度投入。",
+"工作上的公平、尊重與管理品質，和薪資一樣重要。"]],
+["生活方式與享樂觀","日常節奏、享受生活與自律。",[
+"生活不應只為未來做準備，也要留時間享受當下。",
+"規律的作息與生活習慣，通常比隨興而為更能帶來長期滿足。",
+"我願意為旅行、興趣或特別體驗投入相當比例的可支配收入。",
+"比起物質享受，我更在意能否掌握自己的時間與生活節奏。",
+"即使有重要目標，也應保留休息、娛樂與什麼都不做的空間。"]],
+["自由與個人界線","自主權、隱私、承諾與界線。",[
+"只要不傷害他人，成年人應有權選擇自己的生活方式。",
+"親密或親近的關係也不代表必須分享所有隱私。",
+"承諾一旦做出，就應盡力履行，即使後來變得不方便。",
+"我需要固定且不被打擾的獨處時間，才能維持良好狀態。",
+"關心一個人不應變成替對方做決定或控制對方的選擇。"]],
+["情緒與衝突處理","情緒表達、溝通、修復與責任。",[
+"有衝突時，應盡量把問題說清楚，而不是期待對方自己理解。",
+"即使當下情緒很強烈，也應避免用羞辱或威脅的方式表達。",
+"道歉除了表達歉意，也應包含理解造成的影響與後續改變。",
+"遇到爭執時，先冷靜一段時間再談，通常比立刻解決更有效。",
+"即使雙方對事情的看法不同，也應努力理解對方為何會有那種感受。"]],
+["學習與成長觀","能力、改變、好奇心與自我要求。",[
+"即使沒有直接回報，持續學習新事物本身也有價值。",
+"犯錯後，找出可以調整的方法比證明自己沒有錯更重要。",
+"我更重視真正理解原理，而不是只記住規則或標準答案。",
+"一個人應定期檢視自己的信念，並在有充分理由時願意改變。",
+"對自己有高標準能促進成長，但也應允許自己有不完美的時候。"]],
+["科技與環境觀","科技使用、隱私、永續與便利。",[
+"只要能提升效率，適度使用新科技通常值得嘗試。",
+"即使很方便，我也不願為了服務而過度犧牲個人資料與隱私。",
+"環境保護值得個人承擔一些成本或不便。",
+"評估科技或產品時，除了功能與價格，也應考慮其長期社會影響。",
+"面對資訊時，我會盡量查證來源，而不只依賴熱門度或多數人的看法。"]],
+["風險與安全觀","不確定性、準備、冒險與保障。",[
+"做重大決定前，應先評估最壞情況以及自己能否承受。",
+"人生中值得的機會，有時需要在資訊不完整時做出選擇。",
+"即使成功機率不低，只要失敗代價太大，我仍傾向避免冒險。",
+"為了保有選擇自由，建立緊急預備金或備案是必要的。",
+"比起完全避免失敗，學會從可承受的失敗中恢復更重要。"]],
+["愛情與親密關係觀","親密、承諾、互相照顧與個體性。",[
+"長期關係應建立在尊重與選擇上，而不是只靠責任或習慣維持。",
+"伴侶應願意主動了解彼此在意的事，而不只在被要求時才回應。",
+"即使相愛，兩個人也可以有不同的興趣、朋友與生活安排。",
+"關係出現反覆的問題時，具體行動與持續改變比口頭承諾更重要。",
+"對關係的重大期待（例如金錢、忠誠、未來規劃）應明確討論，而不是默認對方想法相同。"]],
+["生命與幸福觀","幸福來源、生命有限性與內在滿足。",[
+"幸福更取決於日常生活是否符合自己的價值，而不只是外在條件。",
+"想到生命有限，會讓我更願意把時間留給真正重要的人事物。",
+"平靜、穩定與滿足感，和刺激、成就或興奮同樣重要。",
+"我認為人生即使沒有單一、宏大的使命，也可以很有意義。",
+"衡量自己過得好不好時，我更在意真實感受，而不是別人眼中的成功。"]]
+];
+const labels = ["人生觀","金錢觀","道德與是非觀","社會與公平觀","家庭觀","友情與人際觀","工作與事業觀","生活方式與享樂觀","自由與個人界線","情緒與衝突處理","學習與成長觀","科技與環境觀","風險與安全觀","愛情與親密關係觀","生命與幸福觀"];
+const root=document.getElementById('questions');
+let index=0;
+sections.forEach((section,si)=>{
+ const card=document.createElement('section');card.className='domain';card.id='domain-'+si;
+ const head=document.createElement('div');head.className='domain-head';
+ head.innerHTML='<h2>'+ (si+1)+'. '+section[0]+'</h2><p>'+section[1]+'</p>';card.appendChild(head);
+ section[2].forEach((q,qi)=>{
+  index++;const id='q'+index;
+  const wrap=document.createElement('div');wrap.className='question';wrap.id='wrap-'+id;
+  const p=document.createElement('p');p.className='qtext';p.innerHTML='<span class="qnum">Q'+String(index).padStart(2,'0')+'</span>'+q;wrap.appendChild(p);
+  const choices=document.createElement('div');choices.className='choices';choices.setAttribute('role','radiogroup');choices.setAttribute('aria-label',q);
+  for(let v=1;v<=5;v++){
+   const item=document.createElement('div');item.className='choice';
+   const input=document.createElement('input');input.type='radio';input.name=id;input.id=id+'-'+v;input.value=String(v);input.required=true;
+   input.addEventListener('change',updateProgress);
+   const label=document.createElement('label');label.htmlFor=input.id;label.innerHTML=v+'<span>'+(['','非常不同意','不同意','普通','同意','非常同意'][v])+'</span>';
+   item.appendChild(input);item.appendChild(label);choices.appendChild(item);
+  }
+  wrap.appendChild(choices);card.appendChild(wrap);
+ });root.appendChild(card);
+});
+function updateProgress(){
+ const n=document.querySelectorAll('.question input:checked').length;
+ document.getElementById('progress').value=n;document.getElementById('progressText').textContent=n+' / 75 題';
+ document.querySelectorAll('.question').forEach(q=>{if(q.querySelector('input:checked'))q.classList.remove('missing')});
+}
+document.getElementById('quiz').addEventListener('submit',function(e){
+ e.preventDefault();
+ const name=document.getElementById('respondent').value.trim();
+ const unanswered=[];
+ for(let i=1;i<=75;i++)if(!document.querySelector('input[name="q'+i+'"]:checked'))unanswered.push(i);
+ if(!name||unanswered.length){
+  document.getElementById('formError').style.display='block';
+  unanswered.forEach(i=>document.getElementById('wrap-q'+i).classList.add('missing'));
+  if(!name)document.getElementById('respondent').focus();
+  else document.getElementById('wrap-q'+unanswered[0]).scrollIntoView({behavior:'smooth',block:'center'});
+  return;
+ }
+ document.getElementById('formError').style.display='none';
+ const answers=[];
+ let qn=0;
+ sections.forEach((section,si)=>section[2].forEach((question,qi)=>{
+  qn++;answers.push({id:'Q'+String(qn).padStart(2,'0'),domain:section[0],domainNumber:si+1,question:question,answer:Number(document.querySelector('input[name="q'+qn+'"]:checked').value)});
+ }));
+ const payload={schema:'two-person-values-quiz/v1',title:'雙人全方位價值觀測驗',respondent:name,completedAt:new Date().toISOString(),scale:{min:1,max:5,meaning:{1:'非常不同意',2:'不同意',3:'普通／視情況',4:'同意',5:'非常同意'}},domainOrder:labels,questionCount:75,answers:answers};
+ const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json;charset=utf-8'});
+ const url=URL.createObjectURL(blob);const a=document.createElement('a');
+ const safe=name.replace(/[\\/:*?"<>|]/g,'_').replace(/\s+/g,'_').slice(0,40)||'填寫者';
+ a.href=url;a.download='價值觀測驗_'+safe+'.json';document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
+ document.getElementById('resultText').textContent='已完成 '+name+' 的 75 題作答，JSON 檔案已開始下載。';
+ document.getElementById('result').style.display='block';document.getElementById('result').scrollIntoView({behavior:'smooth',block:'start'});
+});
+document.getElementById('resetBtn').addEventListener('click',()=>{
+ if(!confirm('確定清除所有作答？此操作無法復原。'))return;
+ document.getElementById('quiz').reset();document.querySelectorAll('.question').forEach(q=>q.classList.remove('missing'));
+ document.getElementById('formError').style.display='none';document.getElementById('result').style.display='none';updateProgress();window.scrollTo({top:0,behavior:'smooth'});
+});
+document.getElementById('backBtn').addEventListener('click',()=>{document.getElementById('result').style.display='none';document.getElementById('questions').scrollIntoView({behavior:'smooth'});});
+</script>
+</body>
+</html>
